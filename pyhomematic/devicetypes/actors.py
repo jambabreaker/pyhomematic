@@ -1,5 +1,5 @@
 import logging
-from pyhomematic.devicetypes.generic import HMDevice
+from pyhomematic.devicetypes.generic import HMDevice, HMWiredMixin
 from pyhomematic.devicetypes.sensors import HMSensor
 from pyhomematic.devicetypes.helper import (
     HelperWorking, HelperActorState, HelperActorLevel, HelperActionOnTime,
@@ -44,7 +44,7 @@ class Blind(GenericBlind, HelperWorking):
         self.ACTIONNODE.update({"STOP": self.ELEMENT})
 
 
-class KeyBlind(GenericBlind, HelperWorking, HelperActionPress):
+class KeyBlind(GenericBlind, HelperWorking, HelperActionPress, HMWiredMixin):
     """
     Blind switch that raises and lowers roller shutters or window blinds.
     """
@@ -52,13 +52,14 @@ class KeyBlind(GenericBlind, HelperWorking, HelperActionPress):
         super().__init__(device_description, proxy, resolveparamsets)
 
         # init metadata
+        self.WRITENODE.update({"LEVEL": self.ELEMENT})
         self.ACTIONNODE.update({"STOP": self.ELEMENT})
-        self.EVENTNODE.update({"PRESS_SHORT": self.ELEMENT,
-                               "PRESS_LONG_RELEASE": self.ELEMENT})
+        self.EVENTNODE.update({"PRESS_SHORT": [1, 2],
+                               "PRESS_LONG_RELEASE": [1, 2]})
 
     @property
     def ELEMENT(self):
-        return [1, 2]
+        return [3]
 
 
 class GenericDimmer(HMActor, HelperActorLevel):
@@ -144,7 +145,7 @@ class Switch(GenericSwitch, HelperWorking):
         return [1]
 
 
-class IOSwitch(GenericSwitch, HelperWorking, HelperEventRemote):
+class IOSwitch(GenericSwitch, HelperWorking, HelperEventRemote, HMWiredMixin):
     """
     Switch turning attached device on or off.
     """
@@ -311,7 +312,7 @@ DEVICETYPES = {
     "HMW-IO-12-Sw7-DR": IOSwitch,
     "HMW-LC-Sw2-DR": IOSwitch,
     "HMW-LC-Bl1-DR": KeyBlind,
-    "HMW-LC-Bl1-DR-2": KeyBlind,
+#    "HMW-LC-Bl1-DR-2": KeyBlind, #EQ3 does not list this product (as of 6.1.2017)
     "HMW-LC-Dim1L-DR": KeyDimmer,
     "HMIP-PS": IPSwitch,
     "HMIP-PSM": IPSwitchPowermeter,

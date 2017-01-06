@@ -198,7 +198,6 @@ class HMChannel(HMGeneric):
                       self._ADDRESS, err)
             return False
 
-
 class HMDevice(HMGeneric):
     def __init__(self, device_description, proxy, resolveparamsets=False):
         super().__init__(device_description, proxy, resolveparamsets)
@@ -373,3 +372,8 @@ class HMDevice(HMGeneric):
             return self.CHANNELS[channel].getValue(key)
 
         LOG.error("HMDevice.getValue: channel not found %i!" % channel)
+
+class HMWiredMixin(HMDevice):
+    def __init__(self, device_description, proxy, resolveparamsets=False):
+        super().__init__(device_description, proxy, resolveparamsets)
+        self.ATTRIBUTENODE.pop("RSSI_DEVICE", None)

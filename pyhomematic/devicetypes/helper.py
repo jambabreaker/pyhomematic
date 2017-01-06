@@ -67,6 +67,18 @@ class HelperBinaryState(HMDevice):
     def get_state(self, channel=None):
         """ Returns current state of handle """
         return bool(self.getBinaryData("STATE", channel))
+        
+class HelperBinarySensor(HMDevice):
+    """Return the state of binary sensors."""
+    def __init__(self, device_description, proxy, resolveparamsets=False):
+        super().__init__(device_description, proxy, resolveparamsets)
+
+        # init metadata
+        self.BINARYNODE.update({"SENSOR": self.ELEMENT})
+
+    def get_state(self, channel=None):
+        """ Returns current state of handle """
+        return bool(self.getBinaryData("SENSOR", channel))
 
 
 class HelperSensorState(HMDevice):

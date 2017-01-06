@@ -291,8 +291,15 @@ class RPCFunctions(object):
                         try:
                             if i.get('address') in self.devices[remote]:
                                 self.devices[remote][i['address']].NAME = i['name']
+                                for channels in i['channels']:
+                                    self.devices_all[remote][channels['address']].NAME = channels['name']
+
                         except Exception as err:
                             LOG.warning("RPCFunctions.addDeviceNames: Exception: %s" % str(err))
+                            # import sys
+                            # exc_type, exc_obj, exc_tb = sys.exc_info()
+                            # fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                            # LOG.warning("    Exceptiontype: %s, Module: %s, Line: %s"%(exc_type, fname, exc_tb.tb_lineno) )
 
                 params = {"_session_id_": session}
                 response = self.jsonRpcPost(self.remotes[remote]['ip'], "Session.logout", params)
