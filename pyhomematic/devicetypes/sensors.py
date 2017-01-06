@@ -15,6 +15,21 @@ class HMSensor(HMDevice):
 class HMBinarySensor(HMDevice):
     pass
 
+class WiredShutterContact(HMBinarySensor, HelperBinaryState):
+    """Door / Window contact that emits its open/closed state."""
+    def is_open(self, channel=None):
+        """ Returns True if the contact is open. """
+        return self.get_state(channel)
+
+    def is_closed(self, channel=None):
+        """ Returns True if the contact is closed. """
+        return not self.get_state(channel)
+
+    @property
+    def ELEMENT(self):
+        if "HMW-Sen-SC-12-DR" in self._TYPE:
+            return list(range(12))
+        return [1]
 
 class IPShutterContact(HMBinarySensor, HelperBinaryState, HelperLowBat):
     """Door / Window contact that emits its open/closed state."""
@@ -342,6 +357,7 @@ class WeatherStation(HMSensor):
 
 DEVICETYPES = {
     "HM-Sec-SC": ShutterContact,
+    "HMW-Sen-SC-12-DR": WiredShutterContact,
     "HM-Sec-SC-2": ShutterContact,
     "HM-Sec-SCo": ShutterContact,
     "ZEL STG RM FFK": ShutterContact,

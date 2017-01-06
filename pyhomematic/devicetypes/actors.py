@@ -52,7 +52,8 @@ class KeyBlind(GenericBlind, HelperWorking, HelperActionPress):
         super().__init__(device_description, proxy, resolveparamsets)
 
         # init metadata
-        self.ACTIONNODE.update({"STOP": self.ELEMENT})
+        self.WRITENODE.update({"LEVEL": [3]})
+        self.ACTIONNODE.update({"STOP": [3]})
         self.EVENTNODE.update({"PRESS_SHORT": self.ELEMENT,
                                "PRESS_LONG_RELEASE": self.ELEMENT})
 
@@ -311,7 +312,7 @@ DEVICETYPES = {
     "HMW-IO-12-Sw7-DR": IOSwitch,
     "HMW-LC-Sw2-DR": IOSwitch,
     "HMW-LC-Bl1-DR": KeyBlind,
-    "HMW-LC-Bl1-DR-2": KeyBlind,
+#    "HMW-LC-Bl1-DR-2": KeyBlind, #EQ3 does not list this product (as of 6.1.2017)
     "HMW-LC-Dim1L-DR": KeyDimmer,
     "HMIP-PS": IPSwitch,
     "HMIP-PSM": IPSwitchPowermeter,
